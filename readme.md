@@ -1,6 +1,6 @@
 # xlstabular パッケージ
 
-`\xlstabularstart{`（改行）〜 `}\xlstabularend`で囲った中には，Tabをアラインメントタブとして，改行を改行文字としてtabularを記述できます。
+`\xlstabularstart{`（改行）〜 `}\xlstabularend`で囲った中には，Tabをアラインメントタブとして，改行文字を表の改行としてtabularを記述できます。
 
 Excelで書いた表を，Excelから直接貼り付けて使えるというわけです。
 
