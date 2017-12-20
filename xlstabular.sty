@@ -1,0 +1,112 @@
+\NeedsTeXFormat{LaTeX2e}%
+\ProvidesPackage{xlstabular}[2017/12/20 by domperor(Oura M.) v0.1]%
+\RequirePackage{ifthen}%
+\RequirePackage{keycommand}%
+%%%%%%%%%%%%%%7 User Preferences%%%%%%%%%%%%%%%%
+%1改行幅 Default:kaigyouhaba=1.2zw
+\def\xlstabular@kaigyouhaba#1{%
+\def\xlstabular@kaigyouhaba{#1}%
+}%
+%2縦線有無 Default:tatesen=true
+\def\xlstabular@tatesen#1{%
+\ifthenelse{\equal{#1}{true}}%
+{\def\xlstabular@nokoritatesen{|}%
+\def\xlstabular@midasitatesen{|}}%
+{\def\xlstabular@nokoritatesen{}%
+\def\xlstabular@midasitatesen{}}%
+}%
+%3見出し縦線二重 Default:midasitate=false
+\def\xlstabular@midasitate#1{%
+\ifthenelse{\equal{#1}{true}}%
+{\def\xlstabular@midasitatesen{||}}%
+{\relax}%
+}%
+%4横線有無 Default:yokosen=true
+\def\xlstabular@yokosen#1{%
+\ifthenelse{\equal{#1}{true}}%
+{\def\xlstabular@zenyokosen{\hline}}%
+{\def\xlstabular@zenyokosen{}}%
+}%
+%5見出し横線二重 Default:midasiyoko=false
+\def\xlstabular@midasiyoko#1{%
+\ifthenelse{\equal{#1}{true}}%
+{\def\xlstabular@zenyokosen{\ifnum\thexlstabular@linenum=1\hline\hline\else\hline\fi}}%
+{\relax}%
+}%
+%6見出しアラインメント Default:midasi=center
+\def\xlstabular@hyouhaichimidasi#1{%
+\ifthenelse{\equal{#1}{left}}%
+{\def\xlstabularhyouhaichi{\xlstabular@nokoritatesen l\xlstabular@midasitatesen}}%
+{\ifthenelse{\equal{#1}{center}}%
+{\def\xlstabularhyouhaichi{\xlstabular@nokoritatesen c\xlstabular@midasitatesen}}%
+{\def\xlstabularhyouhaichi{\xlstabular@nokoritatesen r\xlstabular@midasitatesen}}%
+}}%
+%7見出し以外アラインメント Default:nokori=center
+\def\xlstabular@hyouhaichinokori#1{%
+\ifthenelse{\equal{#1}{left}}%
+{\def\xlstabular@kurikaeshihyouhaichi{l\xlstabular@nokoritatesen}}%
+{\ifthenelse{\equal{#1}{center}}%
+{\def\xlstabular@kurikaeshihyouhaichi{c\xlstabular@nokoritatesen}}%
+{\def\xlstabular@kurikaeshihyouhaichi{r\xlstabular@nokoritatesen}}%
+}}%
+%%%%%%%%%%%%%%Internal Code%%%%%%%%%%%%%%
+\newcounter{xlstabular@linenum}%
+\catcode`\^^I=4\catcode`\^^M=13%
+%
+\def\xlstabular@hasamareru{\relax}%
+\def\xlstabular@@hasamareru{\relax}%
+\def\xlstabularcountingmacro#1{%
+\xlstabular@countingmacro#1\xlstabular@countingmacroketsu%
+\def^^M{\stepcounter{xlstabular@linenum}\\[\xlstabular@kaigyouhaba]\xlstabular@zenyokosen}%
+\tabular{\xlstabularhyouhaichi}%
+\xlstabular@zenyokosen%
+\@gobble#1\endtabular%
+}%
+\long\def\xlstabular@countingmacro^^M#1^^M#2\xlstabular@countingmacroketsu{%
+\def\xlstabular@@counting{#1}%
+\xlstabular@loopnakami%
+}%
+\def\xlstabular@loopnakami{%
+\expandafter\xlstabular@counting\xlstabular@@counting ^^I\xlstabular@@hasamareru\xlstabular@ketsu%
+}%
+\def\xlstabular@counting#1^^I#2\xlstabular@ketsu{%
+\def\xlstabular@hasamareru{#2}%
+\ifthenelse{\equal{\xlstabular@hasamareru}{\xlstabular@@hasamareru}}%
+{\xlstabular@endshori}%
+{\xlstabular@keizokushori#2}%
+}%
+\def\xlstabular@keizokushori#1^^I\xlstabular@@hasamareru{%
+\edef\xlstabularhyouhaichi{\xlstabularhyouhaichi\xlstabular@kurikaeshihyouhaichi}%
+\xlstabular@@keizokushori{#1}%
+}%
+\def\xlstabular@@keizokushori#1{%
+\def\xlstabular@@counting{#1}%
+\xlstabular@loopnakami%
+}%
+\def\xlstabular@endshori{%
+\relax%
+}%
+\catcode`\^^M=5\catcode`\^^I=10%
+%
+\def\xlstabular@setTabCR{\catcode`\^^I=4\catcode`\^^M=13
+\xlstabularcountingmacro}%
+\def\xlstabular@resetTabCR{\catcode`\^^M=5\catcode`\^^I=10}%
+%
+%%%%%%%%%%%%%%Default Settings%%%%%%%%%%%%%%
+\newkeycommand\xlstabularstart[%
+enum midasi={center,left,right},%
+enum nokori={center,left,right},%
+kaigyouhaba=1.2zw,enum tatesen={true,false},%
+enum midasitate={false,true},%
+enum yokosen={true,false},%
+enum midasiyoko={false,true}]%
+{\bgroup\setcounter{xlstabular@linenum}{0}%
+\xlstabular@hyouhaichinokori{\commandkey{nokori}}%
+\xlstabular@hyouhaichimidasi{\commandkey{midasi}}%
+\xlstabular@kaigyouhaba{\commandkey{kaigyouhaba}}%
+\xlstabular@tatesen{\commandkey{tatesen}}%
+\xlstabular@midasitate{\commandkey{midasitate}}%
+\xlstabular@yokosen{\commandkey{yokosen}}%
+\xlstabular@midasiyoko{\commandkey{midasiyoko}}%
+\xlstabular@setTabCR}%
+\def\xlstabularend{\xlstabular@resetTabCR\egroup}%

@@ -1,0 +1,53 @@
+\documentclass[a4paper,10pt,twoside,uplatex]{jsarticle}
+\usepackage{xlstabular}
+\begin{document}
+\begin{itemize}
+\item 最初の例\ \ \ \ 
+\xlstabularstart[kaigyouhaba=0.5zw,midasiyoko=true,midasi=left,nokori=right]{
+表は	この	空間に
+Tabキー	で	区切って
+記述	すること	ができます
+Excel	から直で	コピペできる！
+}\xlstabularend
+
+\ 
+
+
+\item ２個目の例
+
+\ 
+
+\xlstabularstart{
+最後のコマが空欄なので	\{\}（ブレースの組）を挟みます→	{}
+途中のコマが空欄なので→		←\{\}（ブレースの組）は不要です
+最後のコマにコントロール・スペース	を入れたので\{\}（ブレースの組）を	挟みます→\ {}
+}\xlstabularend
+
+\ 
+
+\item カテゴリコードの表
+
+\ 
+
+\xlstabularstart[kaigyouhaba=0.2zw]{
+カテゴリコード	役割	通常このカテゴリコードを持つ文字
+0	制御綴の開始	\textbackslash
+1	グループの開始	\{
+2	グループの終了	\}
+3	数式モード移行	\$
+4	アラインメントタブ	\&
+5	行の終了	\textasciicircum\textasciicircum M
+6	パラメタ文字	\#
+7	上付き文字	\textasciicircum
+8	下付き文字	\_
+9	無視される文字	\textasciicircum\textasciicircum @
+10	空白文字	（半角スペース），\textasciicircum\textasciicircum I
+11	英文字	A〜Z，a〜z
+12	記号	0〜9，!，@など
+13	アクティブ文字	\textasciitilde
+14	コメント開始	\%
+15	存在即エラー	\textasciicircum\textasciicircum ?
+}\xlstabularend
+\end{itemize}
+
+\end{document}
